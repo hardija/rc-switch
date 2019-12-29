@@ -100,6 +100,12 @@ unsigned int RCSwitch::timings[RCSWITCH_MAX_CHANGES];
 #endif
 
 RCSwitch::RCSwitch() {
+  #ifdef RaspberryPi
+  if (wiringPiSetup() == -1) {
+      return;
+  }
+  #endif
+
   this->nTransmitterPin = -1;
   this->setRepeatTransmit(10);
   this->setProtocol(1);

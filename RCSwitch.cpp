@@ -496,6 +496,10 @@ void RCSwitch::send(unsigned long code, unsigned int length) {
   }
 #endif
 
+  // Run this part with high priority
+  if (piHiPri(99) != 0) {
+    // Error
+  }
   for (int nRepeat = 0; nRepeat < nRepeatTransmit; nRepeat++) {
     for (int i = length-1; i >= 0; i--) {
       if (code & (1L << i))
@@ -504,6 +508,10 @@ void RCSwitch::send(unsigned long code, unsigned int length) {
         this->transmit(protocol.zero);
     }
     this->transmit(protocol.syncFactor);
+  }
+  // Reset priority
+  if (piHiPri(0) != 0) {
+    // Error
   }
 
   // Disable transmit after sending (i.e., for inverted protocols)
